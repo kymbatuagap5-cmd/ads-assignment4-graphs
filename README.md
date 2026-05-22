@@ -339,3 +339,68 @@ O(V + E)
 ```
 
 The project demonstrated the practical differences between BFS and DFS and their applications in graph-related problems.
+
+# Bonus Task — Dijkstra’s Algorithm
+
+## Overview
+
+The bonus task extends the graph implementation by supporting weighted edges and implementing Dijkstra’s Algorithm for shortest path calculation.
+
+---
+
+## Weighted Edges
+
+The `Edge` class was modified to include a `weight` field.
+
+Example:
+
+```text
+0 -> 1 (Weight: 3)
+```
+
+The graph structure was updated to store weighted edges using:
+
+```java
+Map<Integer, List<Edge>>
+```
+
+---
+
+## Dijkstra’s Algorithm
+
+Dijkstra’s Algorithm finds the shortest distance from a starting vertex to all other vertices in the graph.
+
+The implementation:
+- starts from a source vertex
+- repeatedly selects the nearest unvisited vertex
+- updates shortest distances
+- continues until all vertices are processed
+
+---
+
+## Time Complexity
+
+The implementation uses simple loops instead of a priority queue.
+
+Time Complexity:
+
+```text
+O(V²)
+```
+
+Where:
+- `V` = number of vertices
+
+---
+
+## Dijkstra Output
+
+![Dijkstra Output](![Dijkstra Output.png](docs/screenshots/Dijkstra%20Output.png))
+
+---
+
+## What I Learned
+
+This bonus task helped me understand weighted graphs and shortest path algorithms.
+
+I learned how Dijkstra’s Algorithm updates minimum distances and how weighted edges affect path calculations.

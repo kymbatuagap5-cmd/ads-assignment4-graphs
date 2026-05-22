@@ -2,17 +2,24 @@ public class Experiment {
 
     public void runTraversals(Graph g) {
 
+
         long startBFS = System.nanoTime();
+
         g.bfs(0);
+
         long endBFS = System.nanoTime();
 
         long bfsTime = endBFS - startBFS;
 
         long startDFS = System.nanoTime();
+
         g.dfs(0);
+
         long endDFS = System.nanoTime();
 
         long dfsTime = endDFS - startDFS;
+
+        g.dijkstra(0);
 
         printResults(bfsTime, dfsTime);
     }
@@ -45,7 +52,6 @@ public class Experiment {
     }
 
     private Graph createGraph(int size) {
-
         Graph graph = new Graph();
 
         for (int i = 0; i < size; i++) {
@@ -54,13 +60,17 @@ public class Experiment {
 
         for (int i = 0; i < size - 1; i++) {
 
-            graph.addEdge(i, i + 1);
+            int weight1 = (i % 5) + 1;
+
+            graph.addEdge(i, i + 1, weight1);
 
             if (i + 2 < size) {
-                graph.addEdge(i, i + 2);
+
+                int weight2 = (i % 3) + 2;
+
+                graph.addEdge(i, i + 2, weight2);
             }
         }
-
         return graph;
     }
 }

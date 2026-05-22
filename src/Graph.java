@@ -2,7 +2,7 @@ import java.util.*;
 
 public class Graph {
 
-    private Map<Integer, List<Integer>> adjacencyList;
+    private Map<Integer, List<Edge>> adjacencyList;
 
     private Map<Integer, Vertex> vertices;
 
@@ -16,19 +16,31 @@ public class Graph {
         adjacencyList.putIfAbsent(v.getId(), new ArrayList<>());
     }
 
-    public void addEdge(int from, int to) {
-        adjacencyList.get(from).add(to);
+    public void addEdge(int from, int to, int weight) {
+
+        Vertex source = vertices.get(from);
+        Vertex destination = vertices.get(to);
+
+        Edge edge = new Edge(source, destination, weight);
+
+        adjacencyList.get(from).add(edge);
 
     }
 
     public void printGraph() {
-        System.out.println("Graph Structure:");
+
+        System.out.println("Weighted Graph Structure:");
 
         for (int vertex : adjacencyList.keySet()) {
+
             System.out.print(vertex + " -> ");
 
-            for (int neighbor : adjacencyList.get(vertex)) {
-                System.out.print(neighbor + " ");
+            for (Edge edge : adjacencyList.get(vertex)) {
+
+                System.out.print(
+                        edge.getDestination().getId() +
+                                "(w:" + edge.getWeight() + ") "
+                );
             }
 
             System.out.println();
@@ -48,11 +60,15 @@ public class Graph {
         while (!queue.isEmpty()) {
 
             int current = queue.poll();
+
             System.out.print(current + " ");
 
-            for (int neighbor : adjacencyList.get(current)) {
+            for (Edge edge : adjacencyList.get(current)) {
+
+                int neighbor = edge.getDestination().getId();
 
                 if (!visited.contains(neighbor)) {
+
                     visited.add(neighbor);
                     queue.add(neighbor);
                 }
@@ -79,11 +95,78 @@ public class Graph {
 
         System.out.print(current + " ");
 
-        for (int neighbor : adjacencyList.get(current)) {
+        for (Edge edge : adjacencyList.get(current)) {
+
+            int neighbor = edge.getDestination().getId();
 
             if (!visited.contains(neighbor)) {
                 dfsRecursive(neighbor, visited);
             }
+        }
+    }
+
+    public void dijkstra(int start) {
+
+        int size = vertices.size();
+
+        int[] distance = new int[size];
+
+        boolean[] visited = new boolean[size];
+
+        Arrays.fill(distance, Integer.MAX_VALUE);
+
+        distance[start] = 0;
+
+        for (int i = 0; i < size - 1; i++) {
+
+            int current = getMinDistanceVertex(distance, visited);
+
+            visited[current] = true;
+
+            for (Edge edge : adjacencyList.get(current)) {
+
+                int neighbor = edge.getDestination().getId();
+
+                int weight = edge.getWeight();
+
+                if (!visited[neighbor]
+                        && distance[current] != Integer.MAX_VALUE
+                        && distance[current] + weight < distance[neighbor]) {
+
+                    distance[neighbor] =
+                            distance[current] + weight;
+                }
+            }
+        }
+
+        printDijkstraResults(start, distance);
+    }
+
+    private int getMinDistanceVertex(int[] distance, boolean[] visited) {
+
+        int min = Integer.MAX_VALUE;
+
+        int minIndex = -1;
+
+        for (int i = 0; i < distance.length; i++) {
+
+            if (!visited[i] && distance[i] < min) {
+
+                min = distance[i];
+                minIndex = i;
+            }
+        }
+
+        return minIndex;
+    }
+
+    private void printDijkstraResults(int start, int[] distance) {
+
+        System.out.println("\nDijkstra Shortest Paths from Vertex " + start);
+
+        for (int i = 0; i < distance.length; i++) {
+
+            System.out.println("To Vertex " + i + " = " + distance[i]);
         }
     }
 }
